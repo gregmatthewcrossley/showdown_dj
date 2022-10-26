@@ -2,13 +2,15 @@ Rails.application.routes.draw do
   
   # Parties
   resources :parties do
-    post :start
-    post :interupt_with
-    post :stop
+    member do
+      post :start
+      post :interupt_with
+      post :stop
+    end
   end
   root "parties#index"
 
   # Spotify API OAuth
-  get '/auth/spotify/callback', to: 'application_controller#spotify_oauth_callback'
+  get '/auth/spotify/callback', to: 'application#spotify_oauth_callback'
 
 end

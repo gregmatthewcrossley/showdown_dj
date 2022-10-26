@@ -18,5 +18,3 @@ class Party < ApplicationRecord
   end
 
 end
-
-https://open.spotify.com/playlist/37i9dQZF1DXa2PvUpywmrr?si=f74ade37b4934a8d
