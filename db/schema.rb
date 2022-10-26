@@ -10,13 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_26_134557) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_26_190510) do
   create_table "parties", force: :cascade do |t|
     t.string "name"
     t.string "playlist_uid"
     t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "context_uri"
+    t.string "uri"
+    t.integer "position"
   end
 
 end

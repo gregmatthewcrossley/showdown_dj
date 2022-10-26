@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       post :start
       post :interupt_with
       post :stop
+      post :skip
     end
   end
   root "parties#index"

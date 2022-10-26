@@ -1,5 +1,21 @@
 class PartiesController < ApplicationController
-  before_action :set_party, only: %i[ show edit update destroy ]
+  before_action :set_party, only: %i[ start interupt_with stop skip show edit update destroy ]
+
+  def start
+    @party.start(spotify_user: spotify_user)
+  end
+
+  def interupt_with
+    @party.interupt_with
+  end
+
+  def stop
+    @party.stop(spotify_user: spotify_user)
+  end
+
+  def skip
+    @party.skip(spotify_user: spotify_user)
+  end
 
   # GET /parties or /parties.json
   def index

@@ -59,7 +59,7 @@ group :development, :test do
   gem "debug", platforms: %i[ mri mingw x64_mingw ]
 
   # Pry
-  gem 'pry'
+  gem 'pry-remote'
 end
 
 group :development do
