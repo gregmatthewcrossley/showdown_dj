@@ -1,5 +1,5 @@
 class Countdown10Left < ApplicationJob
-  queue_as :announcement
+  queue_as :countdown
 
   def perform(spotify_user_hash)
     spotify_user = RSpotify::User.new(spotify_user_hash)

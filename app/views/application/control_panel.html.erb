@@ -3,11 +3,14 @@
     <span class="block">KrishCross Fall Showdown</span>
   </h2>
   <div class="mt-8 flex justify-center">
-    <div class="inline-flex rounded-md shadow">
+    <div class="ml-3 inline-flex">
+      <%= button_to "Volume Down", volume_down_path, method: :post, class: "inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-100 px-8 py-4 text-base font-medium text-indigo-700 hover:bg-indigo-200" %>
+    </div>
+    <div class="ml-3 inline-flex">
       <%= button_to "Play / Pause", play_pause_path, method: :post, class: "inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-4 text-base font-medium text-white hover:bg-indigo-700" %>
     </div>
     <div class="ml-3 inline-flex">
-      <%= button_to "Skip", skip_path, method: :post, class: "inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-100 px-8 py-4 text-base font-medium text-indigo-700 hover:bg-indigo-200" %>
+      <%= button_to "Volume Up", volume_up_path, method: :post, class: "inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-100 px-8 py-4 text-base font-medium text-indigo-700 hover:bg-indigo-200" %>
     </div>
   </div>
 </div>
@@ -48,7 +51,7 @@
   </div>
 </div>
 
-<% if @player.playing? %>
+<% if @player&.playing? %>
   <div class="relative my-10">
     <div class="absolute inset-0 flex items-center" aria-hidden="true">
       <div class="w-full border-t border-gray-300"></div>

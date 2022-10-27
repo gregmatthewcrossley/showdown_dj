@@ -23,5 +23,16 @@ Things you may want to cover:
 
 * ...
 
-
+Start on laptop with:
+```
 foreman start -f Procfile.dev
+```
+
+Ensure Spotify is expecting your IP:
+https://developer.spotify.com/dashboard/applications/27385d2f707a4ee7ad56ae47ffd7fc0d
+
+
+Access on iPhone with:
+```
+http://192.168.1.62:3000
+``` 

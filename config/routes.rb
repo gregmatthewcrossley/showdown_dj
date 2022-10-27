@@ -8,6 +8,8 @@ Rails.application.routes.draw do
 
   # Interruptions
   post '/play_pause',                to: 'application#play_pause'
+  post '/volume_up',                 to: 'application#volume_up'
+  post '/volume_down',               to: 'application#volume_down'
   post '/skip',                      to: 'application#skip'
   post '/start_announcement',        to: 'application#start_announcement'
   post '/stop_announcement',         to: 'application#stop_announcement'
