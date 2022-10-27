@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   end
 
   def control_panel
-
+    # root path
   end
 
   def play_pause
@@ -37,22 +37,48 @@ class ApplicationController < ActionController::Base
   end
 
   def start_announcement
+    pause_if_playing_and_save_playlist_position_parameters
+    AnnouncementJob.perform_later spotify_user.to_hash
     redirect_to root_path
   end
 
   def stop_announcement
+    Delayed::Job.delete_all
+    continue_playing_with playlist_position_parameters
     redirect_to root_path
   end
 
   def start_15_minute_countdown
+    pause_if_playing_and_save_playlist_position_parameters
+    player.play_track("spotify:track:7rItgZqqlg6807KrBEDXrD") # suspense https://open.spotify.com/track/7rItgZqqlg6807KrBEDXrD?si=3809a86b77f04ec5
+    player.repeat(state: 'track')
+    # play the 10 minute sound in 5 minutes and resume suspense music
+    Countdown10Left.set(wait: 5.minutes).perform_later spotify_user.to_hash
+    # play the 5 minutes sound in 10 minutes and resume suspense music
+    Countdown05Left.set(wait: 10.minutes).perform_later spotify_user.to_hash
+    # play the 1 minute sound in 14 minute and resume suspense music
+    Countdown01Left.set(wait: 14.minutes).perform_later spotify_user.to_hash
+    # play the 10 second sound in 14:50 seconds and resume suspense music
+    Countdown10sLeft.set(wait: 14.minutes + 50.seconds).perform_later spotify_user.to_hash
+    # play the gong in 15 minutes and pause
     redirect_to root_path
   end
 
   def stop_15_minute_countdown
+    Delayed::Job.delete_all
+    continue_playing_with playlist_position_parameters
     redirect_to root_path
   end
 
   def start_awards
+    pause_if_playing_and_save_playlist_position_parameters
+    AwardsJob.perform_later spotify_user.to_hash
+    redirect_to root_path
+  end
+
+  def stop_awards
+    Delayed::Job.delete_all
+    continue_playing_with playlist_position_parameters
     redirect_to root_path
   end
   
@@ -72,6 +98,35 @@ class ApplicationController < ActionController::Base
     return nil unless session[:spotify_user]
     @player ||= spotify_user&.player
   end
+
+  def playlist_position_parameters
+    session[:playlist_position_parameters]
+  end
+
+  def save_playlist_position_parameters
+    session[:playlist_position_parameters] = {
+      'context_uri' => player.context_uri,
+      'offset' => {
+        'uri' => player.currently_playing.uri,
+      },
+      'position_ms' => player.progress
+    }
+  end
+
+  def continue_playing_with(playlist_position_parameters)
+    player.play(nil, playlist_position_parameters)
+  end
+
+  def pause_if_playing_and_save_playlist_position_parameters
+    begin
+      if player.playing?
+        save_playlist_position_parameters
+        player.pause
+      end
+    rescue RestClient::NotFound
+    end
+  end
+  
 end
 
 
