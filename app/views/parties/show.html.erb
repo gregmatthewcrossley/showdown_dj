@@ -24,8 +24,8 @@
 <div class="mt-8 flex justify-center">
   <div class="inline-flex rounded-md shadow">
     <span class="isolate inline-flex rounded-md shadow-sm">
-      <%= button_to "Announcement", start_party_path(@party), method: :post, class: "relative inline-flex items-center rounded-l-md border border-gray-300 bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" %>
-      <%= button_to "Resume", start_party_path(@party), method: :post, class: "relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" %>
+      <%= button_to "Announcement", start_announcement_party_path(@party), method: :post, class: "relative inline-flex items-center rounded-l-md border border-gray-300 bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" %>
+      <%= button_to "Resume", stop_announcement_party_path(@party), method: :post, class: "relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" %>
     </span>
   </div>
 </div>
@@ -33,8 +33,8 @@
 <div class="mt-8 flex justify-center">
   <div class="inline-flex rounded-md shadow">
     <span class="isolate inline-flex rounded-md shadow-sm">
-      <%= button_to "15 Minute Countdown", start_party_path(@party), method: :post, class: "relative inline-flex items-center rounded-l-md border border-gray-300 bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" %>
-      <%= button_to "Resume", start_party_path(@party), method: :post, class: "relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" %>
+      <%= button_to "15 Minute Countdown", start_15_minute_countdown_party_path(@party), method: :post, class: "relative inline-flex items-center rounded-l-md border border-gray-300 bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" %>
+      <%= button_to "Resume", stop_15_minute_countdown_party_path(@party), method: :post, class: "relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" %>
     </span>
   </div>
 </div>
@@ -42,13 +42,11 @@
 <div class="mt-8 flex justify-center">
   <div class="inline-flex rounded-md shadow">
     <span class="isolate inline-flex rounded-md shadow-sm">
-      <%= button_to "Awards", start_party_path(@party), method: :post, class: "relative inline-flex items-center rounded-l-md border border-gray-300 bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" %>
-      <%= button_to "Resume", start_party_path(@party), method: :post, class: "relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" %>
+      <%= button_to "Awards", start_awards_party_path(@party), method: :post, class: "relative inline-flex items-center rounded-l-md border border-gray-300 bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" %>
+      <%= button_to "Resume", stop_awards_party_path(@party), method: :post, class: "relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" %>
     </span>
   </div>
 </div>
-
-
 
 <% if @player.playing? %>
   <div class="relative my-10">

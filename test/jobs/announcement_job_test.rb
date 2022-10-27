@@ -1,6 +1,6 @@
 require "test_helper"
 
-class KeepPartyGoingJobTest < ActiveJob::TestCase
+class AnnouncementJobTest < ActiveJob::TestCase
   # test "the truth" do
   #   assert true
   # end
