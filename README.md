@@ -23,7 +23,9 @@ Things you may want to cover:
 
 * ...
 
-Start on laptop with:
+Docs: https://github.com/guilhermesad/rspotify/blob/master/lib/rspotify/player.rb
+
+Start on laptop with:git
 ```
 foreman start -f Procfile.dev
 ```

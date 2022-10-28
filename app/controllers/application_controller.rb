@@ -24,18 +24,30 @@ class ApplicationController < ActionController::Base
   end
 
   def volume_up
-    unless session[:vol_percent] >= 100
+    if session[:vol_percent] >= 100
+      session[:vol_percent] = 100
+    else
       session[:vol_percent] += 10
     end
-    player.volume session[:vol_percent]
+    begin
+      player.volume [session[:vol_percent], 100].min
+    rescue RestClient::Forbidden
+      flash[:notice] = "This device can't change volume remotely."
+    end
     redirect_to root_path
   end
 
   def volume_down
-    unless session[:vol_percent] <= 0
+    if session[:vol_percent] < 0
+      session[:vol_percent] = 100
+    else
       session[:vol_percent] -= 10
     end
-    player.volume session[:vol_percent]
+    begin
+      player.volume [session[:vol_percent], 0].max
+    rescue RestClient::Forbidden
+      flash[:notice] = "This device can't change volume remotely."
+    end
     redirect_to root_path
   end
 
@@ -53,7 +65,7 @@ class ApplicationController < ActionController::Base
   end
 
   def start_announcement
-    pause_if_playing_and_save_playlist_position_parameters
+    save_playlist_position_parameters_if_playing
     AnnouncementJob.perform_later spotify_user.to_hash
     redirect_to root_path
   end
@@ -64,36 +76,63 @@ class ApplicationController < ActionController::Base
     redirect_to root_path
   end
 
-  def start_15_minute_countdown
-    pause_if_playing_and_save_playlist_position_parameters
+  def start_5_minute_countdown
+    save_playlist_position_parameters_if_playing
     player.play_track("spotify:track:7rItgZqqlg6807KrBEDXrD") # suspense https://open.spotify.com/track/7rItgZqqlg6807KrBEDXrD?si=3809a86b77f04ec5
     player.repeat(state: 'track')
-    # play the 10 minute sound in 5 minutes and resume suspense music
-    Countdown10Left.set(wait: 5.minutes).perform_later spotify_user.to_hash
-    # play the 5 minutes sound in 10 minutes and resume suspense music
-    Countdown05Left.set(wait: 10.minutes).perform_later spotify_user.to_hash
-    # play the 1 minute sound in 14 minute and resume suspense music
-    Countdown01Left.set(wait: 14.minutes).perform_later spotify_user.to_hash
-    # play the 10 second sound in 14:50 seconds and resume suspense music
-    Countdown10sLeft.set(wait: 14.minutes + 50.seconds).perform_later spotify_user.to_hash
-    # play the gong in 15 minutes and pause
+    # play the 1 minute soung clip in 4 minute and then play more intense suspensful music
+    Countdown01LeftJob.set(wait: 4.minutes).perform_later spotify_user.to_hash
+    # play the gong in 5 minutes and pause
+    CountdownDoneJob.set(wait: 5.minutes).perform_later spotify_user.to_hash
     redirect_to root_path
   end
 
-  def stop_15_minute_countdown
+  def stop_5_minute_countdown
     Delayed::Job.delete_all
     continue_playing_with playlist_position_parameters
     redirect_to root_path
   end
 
+  def start_10_minute_countdown
+    save_playlist_position_parameters_if_playing
+    player.play_track("spotify:track:7rItgZqqlg6807KrBEDXrD") # suspense https://open.spotify.com/track/7rItgZqqlg6807KrBEDXrD?si=3809a86b77f04ec5
+    player.repeat(state: 'track')
+    # play the 1 minute soung clip in 9 minute and then play more intense suspensful music
+    Countdown01LeftJob.set(wait: 9.minutes).perform_later spotify_user.to_hash
+    # play the gong in 10 minutes and pause
+    CountdownDoneJob.set(wait: 10.minutes).perform_later spotify_user.to_hash
+    redirect_to root_path
+  end
+
+  def stop_10_minute_countdown
+    Delayed::Job.delete_all
+    continue_playing_with playlist_position_parameters
+    redirect_to root_path
+  end
+
+  def start_runway
+    save_playlist_position_parameters_if_playing
+    player.play_track("spotify:track:2FbTXBgXGvHJHuMAHxW9zd") # Runway https://open.spotify.com/track/2FbTXBgXGvHJHuMAHxW9zd?si=ccac2b7bb0074b33
+    player.seek 43000
+    player.repeat(state: 'track')
+    redirect_to root_path
+  end
+
+  def stop_runway
+    player.pause
+    continue_playing_with playlist_position_parameters
+    redirect_to root_path
+  end
+
   def start_awards
-    pause_if_playing_and_save_playlist_position_parameters
-    AwardsJob.perform_later spotify_user.to_hash
+    save_playlist_position_parameters_if_playing
+    player.play_track("spotify:track:6A0mgcjDWaUmuD3WKK9jdA") # Pomp and Circumstance https://open.spotify.com/track/6A0mgcjDWaUmuD3WKK9jdA?si=aa38cfc990154416
+    player.repeat(state: 'track')
     redirect_to root_path
   end
 
   def stop_awards
-    Delayed::Job.delete_all
+    player.pause
     continue_playing_with playlist_position_parameters
     redirect_to root_path
   end
@@ -139,11 +178,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def pause_if_playing_and_save_playlist_position_parameters
+  def save_playlist_position_parameters_if_playing
     begin
       if player&.playing?
         save_playlist_position_parameters
-        player.pause
       end
     rescue RestClient::NotFound
     end
