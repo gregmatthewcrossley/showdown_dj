@@ -1,40 +1,17 @@
-# README
+# Showdown DJ
+A locally-hosted mobile web-app for controlling the playlists and audio effects for the KrishCross Fall Showdown.
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+![image](ShowdownDj-portrait.png)
 
-Things you may want to cover:
+## Instructions
+This app runs on your local laptop, but is controlled via your phone. It will control whatever Spotify device in your house is playing music. Here's how to get it running:
 
-* Ruby version
+1. Create an "app" in the [Spotify developer portal](https://developer.spotify.com/dashboard). 
+- In the "Basic Information" section, note the client ID and client secret that it gives you. 
+- Add some local callback URLs (example: `http://192.168.1.114:3000/auth/spotify/callback` and `http://localhost:3000/auth/spotify/callback`)
+2. Create a new encrypted credentials file (`EDITOR="code --wait" bin/rails credentials:edit`) and add your ID and secret from Spotify. See `config/credentials.yml.sample` for an example of the YAML structure that the app expects.
+3. Start the app on your laptop with `foreman start -f Procfile.dev`
+4. On your phone, browse to the local IP address of your laptop (example: `http://192.168.1.62:3000`)
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
-
-Docs: https://github.com/guilhermesad/rspotify/blob/master/lib/rspotify/player.rb
-
-Start on laptop with:git
-```
-foreman start -f Procfile.dev
-```
-
-Ensure Spotify is expecting your IP:
-https://developer.spotify.com/dashboard/applications/27385d2f707a4ee7ad56ae47ffd7fc0d
-
-
-Access on iPhone with:
-```
-http://192.168.1.62:3000
-``` 
+## Dependencies 
+This app uses the [rspotify gem](https://github.com/guilhermesad/rspotify) to make authenticating and communicating with Spotify a bit simpler. 
